@@ -1,18 +1,24 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "wouter";
 import { motion } from "framer-motion";
-import { loveLanguages, LoveLanguage } from "@/lib/quiz-data";
+import { loveLanguages, LoveLanguage, QuizMode } from "@/lib/quiz-data";
 
 type Scores = Record<LoveLanguage, number>;
 
 export default function Results() {
   const [, setLocation] = useLocation();
+  const [mode, setMode] = useState<QuizMode>("self");
   const [results, setResults] = useState<{
     primary: LoveLanguage;
     scores: { type: LoveLanguage; score: number; percentage: number }[];
   } | null>(null);
 
   useEffect(() => {
+    const savedMode = sessionStorage.getItem("quiz_mode") as QuizMode | null;
+    if (savedMode === "partner" || savedMode === "self") {
+      setMode(savedMode);
+    }
+
     const saved = sessionStorage.getItem("quiz_results");
     if (!saved) {
       setLocation("/");
@@ -25,7 +31,6 @@ export default function Results() {
       return acc;
     }, {} as Record<LoveLanguage, number>);
 
-    // Ensure all languages have a score
     const scores: Scores = {
       W: counts.W || 0,
       S: counts.S || 0,
@@ -51,14 +56,17 @@ export default function Results() {
   if (!results) return null;
 
   const primaryInfo = loveLanguages[results.primary];
+  const isPartner = mode === "partner";
 
   const handleShare = async () => {
-    const text = `My primary love language is ${primaryInfo.name}! Discover yours.`;
+    const text = isPartner
+      ? `I think my partner's love language is ${primaryInfo.name}. Find out yours.`
+      : `My primary love language is ${primaryInfo.name}! Discover yours.`;
     if (navigator.share) {
       try {
         await navigator.share({
           title: "Love Language Quiz",
-          text: text,
+          text,
           url: window.location.origin,
         });
       } catch (err) {
@@ -79,15 +87,15 @@ export default function Results() {
         className="max-w-2xl w-full space-y-12"
       >
         <div className="text-center space-y-6">
-          <motion.span 
+          <motion.span
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
             className="text-sm font-medium text-muted-foreground uppercase tracking-widest"
           >
-            Your Love Language Is
+            {isPartner ? "Your Partner's Love Language Is" : "Your Love Language Is"}
           </motion.span>
-          <motion.h1 
+          <motion.h1
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.5, duration: 0.8, type: "spring" }}
@@ -95,23 +103,36 @@ export default function Results() {
           >
             {primaryInfo.name}
           </motion.h1>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8 }}
             className="text-lg md:text-xl text-foreground/80 leading-relaxed max-w-xl mx-auto"
           >
-            {primaryInfo.description}
+            {isPartner ? primaryInfo.partnerDescription : primaryInfo.description}
           </motion.p>
+
+          {isPartner && (
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.1 }}
+              className="inline-block bg-primary/10 text-primary text-sm font-medium px-4 py-2 rounded-full"
+            >
+              Based on how you see your partner
+            </motion.div>
+          )}
         </div>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.2, duration: 0.6 }}
           className="bg-card rounded-3xl p-6 md:p-8 shadow-sm border border-border/50 space-y-6"
         >
-          <h3 className="text-xl font-serif text-foreground text-center">Your Spectrum</h3>
+          <h3 className="text-xl font-serif text-foreground text-center">
+            {isPartner ? "Their Spectrum" : "Your Spectrum"}
+          </h3>
           <div className="space-y-4">
             {results.scores.map((item, i) => (
               <div key={item.type} className="space-y-2">
@@ -123,8 +144,8 @@ export default function Results() {
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${item.percentage}%` }}
-                    transition={{ delay: 1.5 + (i * 0.1), duration: 0.8, ease: "easeOut" }}
-                    className={`h-full rounded-full ${i === 0 ? 'bg-primary' : 'bg-primary/30'}`}
+                    transition={{ delay: 1.5 + i * 0.1, duration: 0.8, ease: "easeOut" }}
+                    className={`h-full rounded-full ${i === 0 ? "bg-primary" : "bg-primary/30"}`}
                   />
                 </div>
               </div>
@@ -132,24 +153,29 @@ export default function Results() {
           </div>
         </motion.div>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 2 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6"
+          className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2"
         >
-          <button 
+          <button
+            data-testid="button-share"
             onClick={handleShare}
             className="w-full sm:w-auto inline-flex items-center justify-center h-14 px-8 text-lg font-medium text-primary-foreground bg-primary hover:bg-primary/90 rounded-full transition-colors shadow-md hover:shadow-lg"
           >
             Share Results
           </button>
-          <Link 
+          <Link
             href="/"
-            onClick={() => sessionStorage.removeItem("quiz_results")}
+            data-testid="link-retake"
+            onClick={() => {
+              sessionStorage.removeItem("quiz_results");
+              sessionStorage.removeItem("quiz_mode");
+            }}
             className="w-full sm:w-auto inline-flex items-center justify-center h-14 px-8 text-lg font-medium text-foreground hover:bg-muted rounded-full transition-colors"
           >
-            Retake Quiz
+            Start Over
           </Link>
         </motion.div>
       </motion.div>

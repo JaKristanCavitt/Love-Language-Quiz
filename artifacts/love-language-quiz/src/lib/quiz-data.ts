@@ -1,4 +1,5 @@
 export type LoveLanguage = "W" | "S" | "G" | "T" | "P";
+export type QuizMode = "self" | "partner";
 
 export interface Answer {
   text: string;
@@ -124,25 +125,143 @@ export const questions: Question[] = [
   }
 ];
 
+export const partnerQuestions: Question[] = [
+  {
+    id: 1,
+    text: "What seems to make your partner feel most appreciated?",
+    answers: [
+      { type: "W", text: "When you tell them how much they mean to you" },
+      { type: "S", text: "When you take care of something before they even ask" },
+      { type: "G", text: "When you bring them something thoughtful, just because" },
+      { type: "T", text: "When you put your phone down and give them your full attention" },
+      { type: "P", text: "When you hold their hand or give them a long hug" },
+    ]
+  },
+  {
+    id: 2,
+    text: "When your partner is going through a hard time, what helps them most?",
+    answers: [
+      { type: "W", text: "Hearing 'I'm proud of you' or 'I'm here for you' from you" },
+      { type: "S", text: "You stepping in and helping lighten their load" },
+      { type: "G", text: "A small gift that shows you were thinking of them" },
+      { type: "T", text: "You sitting with them quietly, just being present" },
+      { type: "P", text: "A comforting touch on the shoulder or a tight hug" },
+    ]
+  },
+  {
+    id: 3,
+    text: "How does your partner most naturally show love to you?",
+    answers: [
+      { type: "W", text: "Telling you how much you mean to them, often" },
+      { type: "S", text: "Doing things for you without being asked" },
+      { type: "G", text: "Picking up little things they know you'll love" },
+      { type: "T", text: "Making time to be fully present with you" },
+      { type: "P", text: "Reaching out to touch you — a hand on your back, a hug" },
+    ]
+  },
+  {
+    id: 4,
+    text: "What would feel most meaningful to your partner on their birthday?",
+    answers: [
+      { type: "W", text: "A heartfelt handwritten card or a loving speech" },
+      { type: "S", text: "You handling all the details so they can simply enjoy it" },
+      { type: "G", text: "A gift you clearly put real thought and care into" },
+      { type: "T", text: "A whole day spent together doing what they love" },
+      { type: "P", text: "Long, warm hugs from the people they care about" },
+    ]
+  },
+  {
+    id: 5,
+    text: "When things feel distant between you, what does your partner seem to miss most?",
+    answers: [
+      { type: "W", text: "Kind words and verbal reassurance from you" },
+      { type: "S", text: "Feeling looked after — your small acts of help" },
+      { type: "G", text: "Spontaneous tokens of affection from you" },
+      { type: "T", text: "Uninterrupted, quality time together" },
+      { type: "P", text: "Physical closeness — touch and proximity" },
+    ]
+  },
+  {
+    id: 6,
+    text: "What tends to hurt your partner most in your relationship?",
+    answers: [
+      { type: "W", text: "Criticism or harsh words" },
+      { type: "S", text: "Feeling like they handle everything on their own" },
+      { type: "G", text: "Feeling forgotten — no thoughtful gestures" },
+      { type: "T", text: "Feeling like they don't have your full attention" },
+      { type: "P", text: "Feeling physically disconnected or distant from you" },
+    ]
+  },
+  {
+    id: 7,
+    text: "Your partner's ideal evening together looks like...",
+    answers: [
+      { type: "W", text: "Deep, meaningful conversation for hours" },
+      { type: "S", text: "One of you cooking while the other relaxes" },
+      { type: "G", text: "A small surprise — flowers, a treat, something thoughtful" },
+      { type: "T", text: "A walk, a film, fully present with no distractions" },
+      { type: "P", text: "Curled up close together, just being near each other" },
+    ]
+  },
+  {
+    id: 8,
+    text: "What makes a celebration feel truly special to your partner?",
+    answers: [
+      { type: "W", text: "Toasts, words of appreciation, being verbally celebrated" },
+      { type: "S", text: "You handling everything so they can just be present" },
+      { type: "G", text: "A thoughtful, personal gift that shows you know them" },
+      { type: "T", text: "Quality time — the shared experience and memories" },
+      { type: "P", text: "Being surrounded by warmth and physical closeness" },
+    ]
+  },
+  {
+    id: 9,
+    text: "Your partner feels most loved when...",
+    answers: [
+      { type: "W", text: "You say things that lift them up and express how you feel" },
+      { type: "S", text: "You notice what they need and quietly take care of it" },
+      { type: "G", text: "You surprise them with something you knew they'd love" },
+      { type: "T", text: "You choose to spend time with them over other things" },
+      { type: "P", text: "You initiate physical closeness — a touch, a hug, a kiss" },
+    ]
+  },
+  {
+    id: 10,
+    text: "The most romantic gesture you could make for your partner is...",
+    answers: [
+      { type: "W", text: "Writing them a love letter or leaving sweet notes" },
+      { type: "S", text: "Handling something stressful for them without being asked" },
+      { type: "G", text: "Planning a surprise with gifts and thoughtful details" },
+      { type: "T", text: "Planning a whole day for just the two of you, phone-free" },
+      { type: "P", text: "A spontaneous, loving embrace out of nowhere" },
+    ]
+  }
+];
+
 export const loveLanguages = {
   W: {
     name: "Words of Affirmation",
-    description: "You feel most loved through kind, affirming words. Verbal expressions of love, encouragement, and appreciation speak directly to your heart."
+    description: "You feel most loved through kind, affirming words. Verbal expressions of love, encouragement, and appreciation speak directly to your heart.",
+    partnerDescription: "Your partner feels most loved through kind, affirming words. Verbal expressions of love, encouragement, and appreciation speak directly to their heart."
   },
   S: {
     name: "Acts of Service",
-    description: "Actions speak louder than words for you. When someone goes out of their way to help or serve you, you feel deeply cared for."
+    description: "Actions speak louder than words for you. When someone goes out of their way to help or serve you, you feel deeply cared for.",
+    partnerDescription: "Actions speak louder than words for your partner. When you go out of your way to help or take care of things, they feel deeply cared for."
   },
   G: {
     name: "Receiving Gifts",
-    description: "You feel most loved through thoughtful, tangible tokens of affection. It's not about the price — it's the thought and effort behind the gift."
+    description: "You feel most loved through thoughtful, tangible tokens of affection. It's not about the price — it's the thought and effort behind the gift.",
+    partnerDescription: "Your partner feels most loved through thoughtful, tangible tokens of affection. It's not about the price — it's the thought and effort you put behind it."
   },
   T: {
     name: "Quality Time",
-    description: "Your love language is undivided attention. When someone is fully present with you — no distractions — you feel truly valued."
+    description: "Your love language is undivided attention. When someone is fully present with you — no distractions — you feel truly valued.",
+    partnerDescription: "Your partner's love language is undivided attention. When you are fully present with them — no distractions — they feel truly valued."
   },
   P: {
     name: "Physical Touch",
-    description: "Physical presence and touch make you feel most connected. Hugs, a hand on your shoulder, or sitting close — these are your love."
+    description: "Physical presence and touch make you feel most connected. Hugs, a hand on your shoulder, or sitting close — these are your love.",
+    partnerDescription: "Physical presence and touch make your partner feel most connected. Hugs, a hand on their shoulder, or sitting close — these mean the world to them."
   }
 };
